@@ -1,31 +1,17 @@
 import objects.HomePageScooter;
 import objects.OrderPageScooter;
 import objects.RentPageScooter;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
-public class Praktikum {
-
-    private WebDriver driver;
-
-    @Before
-    public void setUp(){
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
-        driver = new ChromeDriver(options);
-        driver.get("https://qa-scooter.praktikum-services.ru/");
-
-    }
+public class Praktikum extends SeleniumConfig {
 
     @Test
-    public void checkSuccessOrderFirst(){
+    public void checkSuccessOrderByTopButton() {
+        driver.get("https://qa-scooter.praktikum-services.ru/");
 
         HomePageScooter objHomePage = new HomePageScooter(driver);
-        objHomePage.clickUpOrderButton();
+        objHomePage.clickOrderButton(HomePageScooter.upOrderButton);
 
         OrderPageScooter objOrderPage = new OrderPageScooter(driver);
 
@@ -39,14 +25,16 @@ public class Praktikum {
         RentPageScooter objRentPage = new RentPageScooter(driver);
         objRentPage.setRentPageFields();
         objRentPage.clickYesToOrder();
-        objRentPage.checkTitleOrderIssued();
+
+        Assert.assertTrue("Не появилось сообщение об успешном создании заказа!", objRentPage.isDisplayedTitleOrderIssued());
     }
 
     @Test
-    public void checkSuccessOrderSecond(){
+    public void checkSuccessOrderByBottomButton() {
+        driver.get("https://qa-scooter.praktikum-services.ru/");
 
         HomePageScooter objHomePage = new HomePageScooter(driver);
-        objHomePage.clickUpOrderButton();
+        objHomePage.clickOrderButton(HomePageScooter.downOrderButton);
 
         OrderPageScooter objOrderPage = new OrderPageScooter(driver);
 
@@ -60,23 +48,7 @@ public class Praktikum {
         RentPageScooter objRentPage = new RentPageScooter(driver);
         objRentPage.setRentPageFields();
         objRentPage.clickYesToOrder();
-        objRentPage.checkTitleOrderIssued();
+
+        Assert.assertTrue("Не появилось сообщение об успешном создании заказа!", objRentPage.isDisplayedTitleOrderIssued());
     }
-
-    @Test
-    public void checkButtonOrder(){
-
-        HomePageScooter objHomePage = new HomePageScooter(driver);
-        objHomePage.clickDownOrderButton();
-
-        OrderPageScooter objOrderPage = new OrderPageScooter(driver);
-        objOrderPage.checkOpenOrderPage();
-    }
-
-    @After
-    public void tearDown() {
-        // Закрой браузер
-        driver.quit();
-    }
-
 }

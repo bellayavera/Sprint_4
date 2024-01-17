@@ -1,17 +1,14 @@
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @RunWith(Parameterized.class)
-public class DropDownList {
-
+public class DropDownList extends SeleniumConfig {
     private final String input;
     private final String output;
 
@@ -35,22 +32,18 @@ public class DropDownList {
     }
 
     @Test
-    public void dropDownListTest(){
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
-        WebDriver driver = new ChromeDriver(options);
-
+    public void dropDownListTest() {
         driver.get("https://qa-scooter.praktikum-services.ru/");
 
         By pathToInput = By.xpath(".//div[text()='" + input + "']");
+        By pathToOutput = By.xpath(".//p[text()='" + output + "']");
 
         ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(pathToInput));
         driver.findElement(pathToInput).click();
 
         new WebDriverWait(driver, 3)
-                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(".//p[text()='" + output + "']")));
+                .until(ExpectedConditions.visibilityOfElementLocated(pathToOutput));
 
-        driver.quit();
+        Assert.assertTrue("Выпадающий список не работает", driver.findElement(pathToOutput).isDisplayed());
     }
-
 }

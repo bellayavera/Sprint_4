@@ -6,23 +6,18 @@ import org.openqa.selenium.WebDriver;
 
 public class HomePageScooter {
     // драйвер
-    private WebDriver driver;
+    private final WebDriver driver;
     // кнопка заказать вверху
-    private By upOrderButton = By.xpath("//button[@class='Button_Button__ra12g']");
+    public static final By upOrderButton = By.xpath("//button[@class='Button_Button__ra12g']");
     // кнопка заказать внизу
-    private By downOrderButton = By.xpath("//button[@class='Button_Button__ra12g Button_Middle__1CSJM']");
-
+    public static final By downOrderButton = By.xpath("//button[@class='Button_Button__ra12g Button_Middle__1CSJM']");
 
     public HomePageScooter(WebDriver driver) {
         this.driver = driver;
     }
 
-    public void clickUpOrderButton() {
-        driver.findElement(upOrderButton).click();
-    }
-
-    public void clickDownOrderButton() {
-        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(downOrderButton));
-        driver.findElement(downOrderButton).click();
+    public void clickOrderButton(By orderButton) {
+        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(orderButton));
+        driver.findElement(orderButton).click();
     }
 }
